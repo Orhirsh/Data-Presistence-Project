@@ -99,7 +99,10 @@ public class MainManager : MonoBehaviour
 
     public void Exit()
     {
-        PlayerData.Instance.LogInfo();
+        if (m_Points < PlayerData.Instance.bestscore)
+        {
+            PlayerData.Instance.LogInfo();
+        }
     #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
     #else
