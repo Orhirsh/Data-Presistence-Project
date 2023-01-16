@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class MainManager : MonoBehaviour
 {
+    public static MainManager Instance;
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
+    public string bestPlayer;
+    
 
     public Text ScoreText;
     public GameObject GameOverText;
-    
+    public Text playerNameText;
     private bool m_Started = false;
     private int m_Points;
-    
+    public Text bestScore;
     private bool m_GameOver = false;
 
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +41,11 @@ public class MainManager : MonoBehaviour
                 brick.PointValue = pointCountArray[i];
                 brick.onDestroyed.AddListener(AddPoint);
             }
+            playerNameText.text = "Player: " + PlayerData.Instance.playerName; // setting current player name text on screen
+
+            bestScore.text = $"Best Score : {PlayerData.Instance.bestscore} By : {PlayerData.Instance.bestPlayer}"; // setting best score;
+
+
         }
     }
 
@@ -58,6 +69,8 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                
+
             }
         }
     }
@@ -70,7 +83,27 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+         PlayerData.Instance.playerScore = m_Points;
+
+
+        if (PlayerData.Instance.playerScore > PlayerData.Instance.bestscore)
+        {
+           
+            PlayerData.Instance.bestscore = PlayerData.Instance.playerScore;
+            PlayerData.Instance.bestPlayer = PlayerData.Instance.playerName;
+
+        }
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    public void Exit()
+    {
+        PlayerData.Instance.LogInfo();
+    #if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+    #else
+        Application.Quit(); // original code to quit Unity player
+    #endif
     }
 }
