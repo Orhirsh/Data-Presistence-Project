@@ -69,10 +69,9 @@ public class MainManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                
-
             }
         }
+        PlayerData.Instance.playerScore = m_Points;
     }
 
     void AddPoint(int point)
@@ -83,8 +82,6 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-         PlayerData.Instance.playerScore = m_Points;
-
 
         if (PlayerData.Instance.playerScore > PlayerData.Instance.bestscore)
         {
@@ -99,10 +96,8 @@ public class MainManager : MonoBehaviour
 
     public void Exit()
     {
-        if (m_Points < PlayerData.Instance.bestscore)
-        {
-            PlayerData.Instance.LogInfo();
-        }
+        GameOver();
+       PlayerData.Instance.LogInfo();     
     #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
     #else

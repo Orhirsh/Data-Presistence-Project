@@ -55,7 +55,13 @@ public class PlayerData : MonoBehaviour
             bestPlayer = data.bestPlayer;
         }
     }
-    
+    public void ClearBoard()
+    {
+        playerName = "";
+        playerScore = 0;
+        bestPlayer = "";
+        bestscore = 0;
+    }
 
     
 }
